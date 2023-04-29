@@ -4,14 +4,20 @@ import { View, ActivityIndicator } from "react-native";
 import styles from "./styles";
 import PageHeader from "../../components/PageHeader";
 import axios from "axios";
-import MovieItem from "../../components/MovieItem";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
+
+import { FlatList } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import MovieItem, { Movie } from "../../components/MovieItem";
+import { useFocusEffect } from "@react-navigation/native";
+useFocusEffect;
 
 function ListMovies() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [movies, setMovies] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [favorites, setFavorites] = useState<number[]>([]);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -30,6 +36,20 @@ function ListMovies() {
     fetchMovies();
   }, [currentPage]);
 
+  function loadFavorites() {
+    AsyncStorage.getItem("favorites").then((response) => {
+      if (response) {
+        setFavorites(JSON.parse(response));
+      }
+    });
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      loadFavorites();
+    }, [])
+  );
+
   const handleLoadMore = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -39,25 +59,25 @@ function ListMovies() {
   return (
     <View style={styles.container}>
       <PageHeader title="Filmes disponiveis:" />
-      <ScrollView
-        style={styles.teacherList}
-        contentContainerStyle={{
-          paddingHorizontal: 16,
-          paddingBottom: 16,
-        }}
-      >
+      <View style={styles.movieList}>
         {isLoading ? (
           <ActivityIndicator size="large" />
         ) : (
           <FlatList
             data={movies}
-            renderItem={({ item: movie }) => <MovieItem movie={movie} />}
+            renderItem={({ item: movie }) => (
+              <MovieItem
+                key={movie.id}
+                movie={movie}
+                favorited={favorites.includes(movie.id)}
+              />
+            )}
             keyExtractor={(item, index) => String(index)}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.1}
           />
         )}
-      </ScrollView>
+      </View>
     </View>
   );
 }

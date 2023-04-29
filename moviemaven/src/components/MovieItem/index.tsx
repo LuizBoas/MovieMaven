@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import { View, Image, Text, Linking } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Image, Text, Share } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
-// import AsyncStorage from "@react-native-community/async-storage";
 
 import heartOutlineIcon from "../../assets/images/icons/heart-outline.png";
 import unfavoriteIcon from "../../assets/images/icons/unfavorite.png";
-import whatsappIcon from "../../assets/images/icons/whatsapp.png";
+import { Ionicons } from "@expo/vector-icons";
 
 import styles from "./styles";
 import { genreMap } from "../../constants/movie";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
-interface Movie {
+export interface Movie {
+  id: string;
   title: string;
   overview: string;
   release_date: string;
@@ -22,7 +24,7 @@ interface Movie {
 
 interface MovieItemProps {
   movie: Movie;
-  favorited?: boolean;
+  favorited: boolean;
 }
 
 const MovieItem: React.FC<MovieItemProps> = ({
@@ -32,27 +34,49 @@ const MovieItem: React.FC<MovieItemProps> = ({
   const [isFavorited, setIsFavorited] = useState(favorited);
   const genreNames = movie.genre_ids.map((id) => genreMap[id]).join(", ");
 
-  // async function handleToggleFavorite() {
-  //   const favorites = await AsyncStorage.getItem('favorites');
-  //   let favoritesArray = [];
+  const shareMovie = async () => {
+    try {
+      const result = await Share.share({
+        message: `Confira ${movie.title} no The Movie DB: https://www.themoviedb.org/movie/${movie.id}`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+        } else {
+        }
+      } else if (result.action === Share.dismissedAction) {
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
 
-  //   if (favorites) {
-  //     favoritesArray = JSON.parse(favorites);
-  //   }
+  async function handleToggleFavorite() {
+    try {
+      let favorites = await AsyncStorage.getItem("favorites");
+      favorites = JSON.parse(favorites!) || [];
 
-  //   if (isFavorited) {
-  //     const favoriteIndex = favoritesArray.findIndex((teacherItem: Teacher) => {
-  //       return teacherItem.id === teacher.id;
-  //     });
-  //     favoritesArray.splice(favoriteIndex, 1);
-  //     setIsFavorited(false);
-  //   } else {
-  //     favoritesArray.push(teacher);
-  //     setIsFavorited(true);
-  //   }
+      let favoritesArray: string[] = [];
+      if (favorites!.length > 0) {
+        favoritesArray = [...favorites!];
+      }
 
-  //   await AsyncStorage.setItem('favorites', JSON.stringify(favoritesArray));
-  // }
+      if (isFavorited) {
+        favoritesArray.splice(favoritesArray.indexOf(movie.id), 1);
+        setIsFavorited(false);
+      } else {
+        favoritesArray.push(movie.id);
+        setIsFavorited(true);
+      }
+
+      await AsyncStorage.setItem("favorites", JSON.stringify(favoritesArray));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    setIsFavorited(favorited);
+  }, [favorited]);
 
   return (
     <View style={styles.container}>
@@ -71,7 +95,7 @@ const MovieItem: React.FC<MovieItemProps> = ({
         <View style={styles.buttonsContainer}>
           <RectButton
             style={[styles.favoriteButton, isFavorited ? styles.favorited : {}]}
-            // onPress={handleToggleFavorite}
+            onPress={handleToggleFavorite}
           >
             {isFavorited ? (
               <Image source={unfavoriteIcon} />
@@ -79,15 +103,8 @@ const MovieItem: React.FC<MovieItemProps> = ({
               <Image source={heartOutlineIcon} />
             )}
           </RectButton>
-          <RectButton
-            style={[styles.favoriteButton, isFavorited ? styles.favorited : {}]}
-            // onPress={handleToggleFavorite}
-          >
-            {isFavorited ? (
-              <Image source={unfavoriteIcon} />
-            ) : (
-              <Image source={heartOutlineIcon} />
-            )}
+          <RectButton style={styles.shareButton} onPress={shareMovie}>
+            <Ionicons name="md-share-social-outline" size={28} color="white" />
           </RectButton>
         </View>
       </View>

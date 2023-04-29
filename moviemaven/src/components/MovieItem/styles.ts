@@ -3,8 +3,8 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#e6e6f0",
+    borderWidth: 0.4,
+    borderColor: "#8257e5",
     borderRadius: 8,
     marginBottom: 16,
     overflow: "hidden",
@@ -12,7 +12,9 @@ const styles = StyleSheet.create({
 
   profile: {
     alignItems: "center",
-    padding: 20,
+    paddingTop: 12,
+    paddingHorizontal: 12,
+    paddingBottom: 5,
     justifyContent: "center",
   },
 
@@ -41,8 +43,9 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-    color: "#fafafc",
-    paddingBottom: 24,
+    backgroundColor: "#fafafc",
+    paddingBottom: 15,
+    paddingTop: 12,
     alignItems: "center",
   },
 
@@ -57,29 +60,21 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 8,
+    marginRight: 80,
   },
 
   favorited: {
     backgroundColor: "#e33d3d",
   },
 
-  contactButton: {
-    backgroundColor: "#04d361",
-    flex: 1,
+  shareButton: {
+    backgroundColor: "#8257e5",
+    width: 56,
     height: 56,
-    flexDirection: "row",
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 8,
-  },
-
-  contactButtonText: {
-    color: "#fff",
-    fontFamily: "Archivo_700Bold",
-    fontSize: 16,
-    marginLeft: 16,
+    marginLeft: 80,
   },
 });
 
