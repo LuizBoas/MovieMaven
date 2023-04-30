@@ -3,8 +3,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import FavoritesMovies from "../pages/FavoritesMovies";
-import ListMovies from "../pages/ListMovies";
+import Favorites from "../pages/Favorites";
+import List from "../pages/List";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -40,8 +40,8 @@ function MoviesTabs() {
       }}
     >
       <Screen
-        name="ListMovies"
-        component={ListMovies}
+        name="List"
+        component={List}
         options={{
           headerShown: false,
           tabBarLabel: "Filmes",
@@ -58,7 +58,7 @@ function MoviesTabs() {
       />
       <Screen
         name="Favorites"
-        component={FavoritesMovies}
+        component={Favorites}
         options={{
           headerShown: false,
           tabBarLabel: "Favoritos",

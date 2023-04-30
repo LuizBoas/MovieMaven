@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   button: {
     height: 150,
     width: "100%",
-    backgroundColor: "#333",
+    backgroundColor: "#04d361",
     borderRadius: 8,
     padding: 24,
     justifyContent: "space-between",
@@ -46,10 +46,6 @@ const styles = StyleSheet.create({
     fontFamily: "Archivo_700Bold",
     fontSize: 20,
     textAlign: "center",
-  },
-
-  buttonPrimary: {
-    backgroundColor: "#04d361",
   },
 
   buttonSecondary: {

@@ -2,8 +2,33 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
+    overflow: "hidden",
+  },
+
+  imageBackground: {
     flex: 1,
-    backgroundColor: "#f0f0f7",
+    resizeMode: "cover",
+  },
+
+  poster: {
+    height: 300,
+    width: "100%",
+    resizeMode: "cover",
+  },
+
+  info: {
+    marginTop: -40,
+  },
+
+  releaseDate: {
+    fontSize: 16,
+    marginTop: 10,
+  },
+
+  overview: {
+    marginTop: 20,
+    fontSize: 18,
+    lineHeight: 25,
   },
 
   movieList: {
@@ -54,6 +79,21 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "Archivo_700Bold",
     fontSize: 16,
+  },
+
+  profile: {
+    alignItems: "center",
+    paddingTop: 25,
+    paddingHorizontal: 12,
+    paddingBottom: 25,
+    justifyContent: "center",
+  },
+
+  post: {
+    width: 150,
+    height: 250,
+    borderRadius: 1,
+    backgroundColor: "#eee",
   },
 });
 

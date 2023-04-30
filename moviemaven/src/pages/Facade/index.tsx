@@ -13,22 +13,24 @@ function Landing() {
   const { navigate } = useNavigation();
   const [totalConnections, setTotalConnections] = useState(0);
 
-  function handleNavigateToListMoviesPages() {
+  function handleNavigateToListPages() {
     navigate("MoviesTabs");
   }
 
   return (
     <View style={styles.container}>
-      <Image source={landingImg} style={styles.banner} />
+      {/* <Image source={landingImg} style={styles.banner} /> */}
 
       <Text style={styles.title}>
         Seja bem-vindo, {"\n"}
-        <Text style={styles.titleBold}>O que deseja fazer?</Text>
+        <Text style={styles.titleBold}>
+          a sua plataforma de lista de filmes.
+        </Text>
       </Text>
 
       <View style={styles.buttonContainer}>
         <RectButton
-          onPress={handleNavigateToListMoviesPages}
+          onPress={handleNavigateToListPages}
           style={[styles.button, styles.buttonPrimary]}
         >
           <Image source={studyIcon} />

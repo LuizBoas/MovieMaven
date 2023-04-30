@@ -12,9 +12,9 @@ const styles = StyleSheet.create({
 
   profile: {
     alignItems: "center",
-    paddingTop: 12,
+    paddingTop: 25,
     paddingHorizontal: 12,
-    paddingBottom: 5,
+    paddingBottom: 25,
     justifyContent: "center",
   },
 
@@ -42,25 +42,20 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 
-  footer: {
-    backgroundColor: "#fafafc",
-    paddingBottom: 15,
-    paddingTop: 12,
-    alignItems: "center",
-  },
-
-  buttonsContainer: {
-    flexDirection: "row",
-  },
-
   favoriteButton: {
+    position: "absolute",
+    bottom: 305,
+    left: 10,
     backgroundColor: "#8257e5",
     width: 56,
     height: 56,
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 80,
+  },
+
+  firstItem: {
+    marginBottom: 23,
   },
 
   favorited: {
@@ -68,13 +63,16 @@ const styles = StyleSheet.create({
   },
 
   shareButton: {
+    position: "absolute",
+    bottom: 305,
+    left: 295,
     backgroundColor: "#8257e5",
     width: 56,
     height: 56,
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
-    marginLeft: 80,
+    marginRight: 80,
   },
 });
 

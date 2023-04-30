@@ -12,7 +12,7 @@ import MovieItem, { Movie } from "../../components/MovieItem";
 import { useFocusEffect } from "@react-navigation/native";
 useFocusEffect;
 
-function FavoritesMovies() {
+function Favorites() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [movies, setMovies] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -37,7 +37,9 @@ function FavoritesMovies() {
     fetchMovies();
   }, [currentPage]);
 
-  useEffect;
+  useEffect(() => {
+    loadFavorites();
+  }, [favorites]);
 
   function loadFavorites() {
     AsyncStorage.getItem("favorites").then((response) => {
@@ -53,10 +55,6 @@ function FavoritesMovies() {
     }, [])
   );
 
-  useEffect(() => {
-    setFilteredMovies(movies.filter((movie) => favorites.includes(movie.id)));
-  }, [movies, favorites]);
-
   const handleLoadMore = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -65,13 +63,13 @@ function FavoritesMovies() {
 
   return (
     <View style={styles.container}>
-      <PageHeader title="Filmes disponiveis:" />
+      <PageHeader title="Filmes disponiveis:" goBack="Facade" />
       <View style={styles.movieList}>
         {isLoading ? (
           <ActivityIndicator size="large" />
         ) : (
           <FlatList
-            data={filteredMovies}
+            data={movies.filter((movies) => favorites.includes(movies.id))}
             renderItem={({ item: movie }) => (
               <MovieItem
                 key={movie.id}
@@ -89,4 +87,4 @@ function FavoritesMovies() {
   );
 }
 
-export default FavoritesMovies;
+export default Favorites;

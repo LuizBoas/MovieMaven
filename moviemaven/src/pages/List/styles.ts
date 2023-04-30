@@ -55,6 +55,14 @@ const styles = StyleSheet.create({
     fontFamily: "Archivo_700Bold",
     fontSize: 16,
   },
+
+  searchInput: {
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 8,
+    margin: 10,
+    marginBottom: 0,
+  },
 });
 
 export default styles;

@@ -5,27 +5,35 @@ import styles from "./styles";
 import PageHeader from "../../components/PageHeader";
 import axios from "axios";
 
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, TextInput } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import MovieItem, { Movie } from "../../components/MovieItem";
 import { useFocusEffect } from "@react-navigation/native";
 useFocusEffect;
 
-function ListMovies() {
+function List() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [movies, setMovies] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [favorites, setFavorites] = useState<number[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await axios.get(
-          `https://api.themoviedb.org/3/discover/movie?api_key=${"2ac0e6167cf0d7a5c8a6afdace6a8808"}&page=${currentPage}`
-        );
-        setMovies((prevMovies) => [...prevMovies, ...response.data.results]);
+        let url = `https://api.themoviedb.org/3/discover/movie?api_key=${"2ac0e6167cf0d7a5c8a6afdace6a8808"}&page=${currentPage}`;
+        if (searchTerm !== "") {
+          url = `https://api.themoviedb.org/3/search/movie?api_key=${"2ac0e6167cf0d7a5c8a6afdace6a8808"}&query=${searchTerm}&page=${currentPage}`;
+        }
+        const response = await axios.get(url);
+        setMovies((prevMovies) => {
+          const newMovies = response.data.results.filter((movie) => {
+            return !prevMovies.some((prevMovie) => prevMovie.id === movie.id);
+          });
+          return [...prevMovies, ...newMovies];
+        });
         setTotalPages(response.data.total_pages);
         setIsLoading(false);
       } catch (error) {
@@ -34,7 +42,7 @@ function ListMovies() {
     };
 
     fetchMovies();
-  }, [currentPage]);
+  }, [currentPage, searchTerm]);
 
   function loadFavorites() {
     AsyncStorage.getItem("favorites").then((response) => {
@@ -56,22 +64,39 @@ function ListMovies() {
     }
   };
 
+  const handleSearch = (text: string) => {
+    setSearchTerm(text);
+    setMovies([]);
+    setCurrentPage(1);
+    setTotalPages(1);
+    setIsLoading(true);
+  };
+
   return (
     <View style={styles.container}>
-      <PageHeader title="Filmes disponiveis:" />
+      <PageHeader title="Filmes disponiveis:" goBack="Facade">
+        <TextInput
+          style={styles.searchInput}
+          onChangeText={handleSearch}
+          value={searchTerm}
+          placeholder="Buscar filmes por nome"
+        />
+      </PageHeader>
       <View style={styles.movieList}>
         {isLoading ? (
           <ActivityIndicator size="large" />
         ) : (
           <FlatList
             data={movies}
-            renderItem={({ item: movie }) => (
-              <MovieItem
-                key={movie.id}
-                movie={movie}
-                favorited={favorites.includes(movie.id)}
-              />
-            )}
+            renderItem={({ item: movie, index }) => {
+              return (
+                <MovieItem
+                  key={movie.id}
+                  movie={movie}
+                  favorited={favorites.includes(movie.id)}
+                />
+              );
+            }}
             keyExtractor={(item, index) => String(index)}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.1}
@@ -82,4 +107,4 @@ function ListMovies() {
   );
 }
 
-export default ListMovies;
+export default List;

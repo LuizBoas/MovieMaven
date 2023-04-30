@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Image, Text, Share } from "react-native";
+import { View, Image, Text, Share, TouchableOpacity } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 
 import heartOutlineIcon from "../../assets/images/icons/heart-outline.png";
@@ -9,7 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import styles from "./styles";
 import { genreMap } from "../../constants/movie";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 export interface Movie {
   id: string;
@@ -25,6 +25,7 @@ export interface Movie {
 interface MovieItemProps {
   movie: Movie;
   favorited: boolean;
+  isFirstItem?: boolean;
 }
 
 const MovieItem: React.FC<MovieItemProps> = ({
@@ -33,6 +34,7 @@ const MovieItem: React.FC<MovieItemProps> = ({
 }: MovieItemProps) => {
   const [isFavorited, setIsFavorited] = useState(favorited);
   const genreNames = movie.genre_ids.map((id) => genreMap[id]).join(", ");
+  const { navigate } = useNavigation();
 
   const shareMovie = async () => {
     try {
@@ -74,39 +76,47 @@ const MovieItem: React.FC<MovieItemProps> = ({
     }
   }
 
+  const handleMoviePress = () => {
+    navigate("Details", { movie }); // navegue para a tela de detalhes do filme
+  };
+
   useEffect(() => {
     setIsFavorited(favorited);
   }, [favorited]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.profile}>
-        <Image
-          style={styles.post}
-          source={{
-            uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-          }}
-        />
+    <View>
+      <TouchableOpacity
+        style={styles.container}
+        activeOpacity={0.6}
+        onPress={handleMoviePress}
+      >
+        <View style={styles.profile}>
+          <Image
+            style={styles.post}
+            source={{
+              uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+            }}
+          />
 
-        <Text style={styles.name}>{movie.title}</Text>
-        <Text style={styles.genres}>{genreNames}</Text>
-      </View>
-      <View style={styles.footer}>
-        <View style={styles.buttonsContainer}>
-          <RectButton
-            style={[styles.favoriteButton, isFavorited ? styles.favorited : {}]}
-            onPress={handleToggleFavorite}
-          >
-            {isFavorited ? (
-              <Image source={unfavoriteIcon} />
-            ) : (
-              <Image source={heartOutlineIcon} />
-            )}
-          </RectButton>
-          <RectButton style={styles.shareButton} onPress={shareMovie}>
-            <Ionicons name="md-share-social-outline" size={28} color="white" />
-          </RectButton>
+          <Text style={styles.name}>{movie.title}</Text>
+          <Text style={styles.genres}>{genreNames}</Text>
         </View>
+      </TouchableOpacity>
+      <View>
+        <RectButton
+          style={[styles.favoriteButton, isFavorited && styles.favorited]}
+          onPress={handleToggleFavorite}
+        >
+          {isFavorited ? (
+            <Image source={unfavoriteIcon} />
+          ) : (
+            <Image source={heartOutlineIcon} />
+          )}
+        </RectButton>
+        <RectButton style={styles.shareButton} onPress={shareMovie}>
+          <Ionicons name="md-share-social-outline" size={28} color="white" />
+        </RectButton>
       </View>
     </View>
   );
