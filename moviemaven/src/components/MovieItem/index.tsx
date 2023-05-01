@@ -77,7 +77,7 @@ const MovieItem: React.FC<MovieItemProps> = ({
   }
 
   const handleMoviePress = () => {
-    navigate("Details", { movie }); // navegue para a tela de detalhes do filme
+    navigate("Details", { movie });
   };
 
   useEffect(() => {

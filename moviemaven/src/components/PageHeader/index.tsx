@@ -45,7 +45,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       </View>
 
       <View style={styles.header}>
-        <Text style={styles.title}>{title}</Text>
+        {title !== "" && <Text style={styles.title}>{title}</Text>}
         <Text style={styles.description}>{description}</Text>
         {headerRight}
       </View>

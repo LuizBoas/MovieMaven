@@ -8,17 +8,23 @@ const styles = StyleSheet.create({
     padding: 40,
   },
 
+  imageBackground: {
+    flex: 1,
+    justifyContent: "center",
+  },
+
   banner: {
     width: "100%",
     resizeMode: "contain",
+    marginTop: -120,
   },
 
   title: {
+    marginTop: -80,
     fontFamily: "Poppins_400Regular",
     color: "#FFF",
     fontSize: 20,
     lineHeight: 30,
-    marginTop: 80,
   },
 
   titleBold: {
@@ -26,39 +32,48 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    flexDirection: "row",
     marginTop: 40,
-    justifyContent: "space-between",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   button: {
-    height: 150,
+    height: 90,
     width: "100%",
-    backgroundColor: "#04d361",
+    backgroundColor: "#04D361",
     borderRadius: 8,
     padding: 24,
-    justifyContent: "space-between",
+    flexDirection: "row",
     alignItems: "center",
+  },
+
+  buttonContent: {
+    flexDirection: "row",
+    width: "50%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: "25%",
+    marginRight: "25%",
   },
 
   buttonText: {
     color: "#fff",
     fontFamily: "Archivo_700Bold",
     fontSize: 20,
-    textAlign: "center",
+    marginLeft: 8,
   },
 
-  buttonSecondary: {
-    backgroundColor: "#9871f5",
-  },
-
-  totalConnections: {
+  textFooter: {
     fontFamily: "Poppins_400Regular",
     color: "#d4c2ff",
     fontSize: 12,
     lineHeight: 20,
-    maxWidth: 140,
-    marginTop: 40,
+    maxWidth: "100%",
+    marginTop: 20,
+  },
+
+  textFooterBold: {
+    fontWeight: "bold",
   },
 });
 

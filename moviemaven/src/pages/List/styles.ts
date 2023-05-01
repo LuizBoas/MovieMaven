@@ -6,62 +6,36 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f7",
   },
 
-  movieList: {
-    marginTop: -40,
+  picker: {
+    height: 60,
     paddingHorizontal: 16,
-    paddingBottom: 20,
-    marginBottom: 220,
+    fontFamily: "Archivo_700Bold",
+    marginBottom: 15,
   },
 
-  searchForm: {
-    marginBottom: 24,
-  },
-
-  label: {
-    color: "#d4c2ff",
+  pickerItem: {
+    fontSize: 20,
+    color: "#f0f0f7",
+    backgroundColor: "#8257e5",
     fontFamily: "Poppins_400Regular",
   },
 
   input: {
-    height: 54,
+    height: 60,
     backgroundColor: "#fff",
     borderRadius: 8,
+    fontSize: 14.5,
+    fontFamily: "Poppins_400Regular",
     justifyContent: "center",
     paddingHorizontal: 16,
-    marginTop: 4,
-    marginBottom: 16,
+    marginBottom: 15,
   },
 
-  inputGroup: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
-  inputBlock: {
-    width: "48%",
-  },
-
-  submitButton: {
-    backgroundColor: "#04d361",
-    height: 56,
-    flexDirection: "row",
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  submitButtonText: {
-    color: "#fff",
-    fontFamily: "Archivo_700Bold",
-    fontSize: 16,
-  },
-
-  searchInput: {
-    backgroundColor: "#fff",
-    padding: 10,
-    borderRadius: 8,
-    margin: 10,
-    marginBottom: 0,
+  movieList: {
+    marginTop: -40,
+    paddingHorizontal: 16,
+    paddingBottom: 20,
+    marginBottom: 200,
   },
 });
 

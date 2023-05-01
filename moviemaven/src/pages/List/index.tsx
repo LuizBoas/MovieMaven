@@ -10,22 +10,35 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import MovieItem, { Movie } from "../../components/MovieItem";
 import { useFocusEffect } from "@react-navigation/native";
-useFocusEffect;
+import { Picker } from "@react-native-picker/picker";
+import { genreMap } from "../../constants/movie";
 
 function List() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoadingCurrentPage, setIsLoadingCurrentPage] =
+    useState<boolean>(false);
   const [movies, setMovies] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [favorites, setFavorites] = useState<number[]>([]);
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filter, setFilter] = useState<string>("");
+  const [typeSearch, setTypeSearch] = useState<string>("popularity");
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        let url = `https://api.themoviedb.org/3/discover/movie?api_key=${"2ac0e6167cf0d7a5c8a6afdace6a8808"}&page=${currentPage}`;
-        if (searchTerm !== "") {
-          url = `https://api.themoviedb.org/3/search/movie?api_key=${"2ac0e6167cf0d7a5c8a6afdace6a8808"}&query=${searchTerm}&page=${currentPage}`;
+        const key = "2ac0e6167cf0d7a5c8a6afdace6a8808";
+        let url = `https://api.themoviedb.org/3/discover/movie?api_key=${key}&page=${currentPage}&sort_by=popularity.desc`;
+        if (filter !== "" && typeSearch === "title") {
+          url = `https://api.themoviedb.org/3/search/movie?api_key=${key}&query=${filter}&page=${currentPage}`;
+        } else if (filter !== "" && typeSearch === "genre") {
+          url = `https://api.themoviedb.org/3/discover/movie?api_key=${key}&page=${currentPage}&with_genres=${filter}`;
+        } else if (
+          typeSearch === "now_playing" ||
+          typeSearch === "top_rated" ||
+          typeSearch === "upcoming"
+        ) {
+          url = `https://api.themoviedb.org/3/movie/${typeSearch}?api_key=${key}&page=${currentPage}`;
         }
         const response = await axios.get(url);
         setMovies((prevMovies) => {
@@ -36,13 +49,14 @@ function List() {
         });
         setTotalPages(response.data.total_pages);
         setIsLoading(false);
+        setIsLoadingCurrentPage(false);
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchMovies();
-  }, [currentPage, searchTerm]);
+  }, [currentPage, filter, typeSearch]);
 
   function loadFavorites() {
     AsyncStorage.getItem("favorites").then((response) => {
@@ -59,13 +73,14 @@ function List() {
   );
 
   const handleLoadMore = () => {
+    setIsLoadingCurrentPage(true);
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
   };
 
   const handleSearch = (text: string) => {
-    setSearchTerm(text);
+    setFilter(text);
     setMovies([]);
     setCurrentPage(1);
     setTotalPages(1);
@@ -74,13 +89,72 @@ function List() {
 
   return (
     <View style={styles.container}>
-      <PageHeader title="Filmes disponiveis:" goBack="Facade">
-        <TextInput
-          style={styles.searchInput}
-          onChangeText={handleSearch}
-          value={searchTerm}
-          placeholder="Buscar filmes por nome"
-        />
+      <PageHeader title="" goBack="Facade">
+        <Picker
+          style={styles.picker}
+          selectedValue={typeSearch}
+          onValueChange={(itemValue, itemIndex) => {
+            setTypeSearch(itemValue);
+            handleSearch("");
+          }}
+          dropdownIconColor="#f0f0f7"
+          itemStyle={styles.pickerItem}
+        >
+          <Picker.Item
+            style={styles.pickerItem}
+            label="Em alta"
+            value="popularity"
+          />
+          <Picker.Item
+            style={styles.pickerItem}
+            label="Novos filmes"
+            value="now_playing"
+          />
+          <Picker.Item
+            style={styles.pickerItem}
+            label="Próximos lançamentos"
+            value="upcoming"
+          />
+          <Picker.Item
+            style={styles.pickerItem}
+            label="Melhores avaliações"
+            value="top_rated"
+          />
+          <Picker.Item
+            style={styles.pickerItem}
+            label="Pesquisar por título"
+            value="title"
+          />
+          <Picker.Item
+            style={styles.pickerItem}
+            label="Pesquisar por gênero"
+            value="genre"
+          />
+        </Picker>
+        {typeSearch === "title" && (
+          <TextInput
+            style={styles.input}
+            onChangeText={handleSearch}
+            value={filter}
+            placeholder="Digite o título do filme"
+          />
+        )}
+        {typeSearch === "genre" && (
+          <Picker
+            style={styles.picker}
+            selectedValue={filter}
+            onValueChange={(itemValue, itemIndex) => handleSearch(itemValue)}
+          >
+            {Object.entries(genreMap).map(([id, name]) => (
+              <Picker.Item
+                style={styles.pickerItem}
+                key={id}
+                label={name}
+                value={id}
+              />
+            ))}
+          </Picker>
+        )}
       </PageHeader>
       <View style={styles.movieList}>
         {isLoading ? (
@@ -100,6 +174,10 @@ function List() {
             keyExtractor={(item, index) => String(index)}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.1}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={
+              isLoadingCurrentPage ? <ActivityIndicator size="large" /> : null
+            }
           />
         )}
       </View>

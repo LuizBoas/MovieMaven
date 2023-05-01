@@ -22,11 +22,11 @@ export interface Movie {
 }
 
 interface Props {
-  route: DetailsRouteProp;
+  route?: DetailsRouteProp;
 }
 
 function Details({ route }: Props) {
-  const { movie } = route.params;
+  const { movie } = route!.params;
   const genreNames = movie.genre_ids.map((id) => genreMap[id]).join(", ");
 
   return (
@@ -34,7 +34,6 @@ function Details({ route }: Props) {
       source={{
         uri: `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`, // definindo a imagem de fundo
       }}
-      resizeMode="cover"
       style={styles.imageBackground}
     >
       <View style={styles.container}>

@@ -13,8 +13,8 @@ function AppStack() {
     <NavigationContainer>
       <Navigator screenOptions={{ headerShown: false }}>
         <Screen name="Facade" component={Facade} />
-        <Screen name="MoviesTabs" component={MoviesTabs} />
         <Screen name="Details" component={Details} />
+        <Screen name="MoviesTabs" component={MoviesTabs} />
       </Navigator>
     </NavigationContainer>
   );

@@ -18,7 +18,6 @@ function Favorites() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [favorites, setFavorites] = useState<number[]>([]);
-  const [filteredMovies, setFilteredMovies] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -63,7 +62,7 @@ function Favorites() {
 
   return (
     <View style={styles.container}>
-      <PageHeader title="Filmes disponiveis:" goBack="Facade" />
+      <PageHeader title="Sua lista de filmes:" goBack="Facade" />
       <View style={styles.movieList}>
         {isLoading ? (
           <ActivityIndicator size="large" />
@@ -80,6 +79,7 @@ function Favorites() {
             keyExtractor={(item, index) => String(index)}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.1}
+            showsVerticalScrollIndicator={false}
           />
         )}
       </View>

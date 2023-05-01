@@ -9,8 +9,7 @@ const styles = StyleSheet.create({
   movieList: {
     marginTop: -40,
     paddingHorizontal: 16,
-    paddingBottom: 20,
-    marginBottom: 240,
+    marginBottom: 220,
   },
 
   searchForm: {
