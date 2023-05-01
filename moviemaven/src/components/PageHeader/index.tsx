@@ -9,7 +9,7 @@ import logoImg from "../../assets/images/logo.png";
 import styles from "./styles";
 
 interface PageHeaderProps {
-  title: string;
+  title?: string;
   description?: string;
   goBack: string;
   headerRight?: ReactNode;
@@ -30,7 +30,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <View style={styles.topBar}>
         <BorderlessButton onPress={handleGoBack}>
           <Ionicons
@@ -44,8 +44,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         <Image source={logoImg} resizeMode="contain" style={styles.logo} />
       </View>
 
-      <View style={styles.header}>
-        {title !== "" && <Text style={styles.title}>{title}</Text>}
+      <View>
+        {title && <Text style={styles.title}>{title}</Text>}
         <Text style={styles.description}>{description}</Text>
         {headerRight}
       </View>

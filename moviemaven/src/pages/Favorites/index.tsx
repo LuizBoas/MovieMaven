@@ -14,6 +14,8 @@ useFocusEffect;
 
 function Favorites() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoadingCurrentPage, setIsLoadingCurrentPage] =
+    useState<boolean>(false);
   const [movies, setMovies] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -23,11 +25,12 @@ function Favorites() {
     const fetchMovies = async () => {
       try {
         const response = await axios.get(
-          `https://api.themoviedb.org/3/discover/movie?api_key=${"2ac0e6167cf0d7a5c8a6afdace6a8808"}&page=${currentPage}`
+          `https://api.themoviedb.org/3/discover/movie?api_key=${"2ac0e6167cf0d7a5c8a6afdace6a8808"}&language=pt-BR&page=${currentPage}`
         );
         setMovies((prevMovies) => [...prevMovies, ...response.data.results]);
         setTotalPages(response.data.total_pages);
         setIsLoading(false);
+        setIsLoadingCurrentPage(false);
       } catch (error) {
         console.log(error);
       }
@@ -56,6 +59,7 @@ function Favorites() {
 
   const handleLoadMore = () => {
     if (currentPage < totalPages) {
+      setIsLoadingCurrentPage(true);
       setCurrentPage(currentPage + 1);
     }
   };
@@ -80,6 +84,9 @@ function Favorites() {
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.1}
             showsVerticalScrollIndicator={false}
+            ListFooterComponent={
+              isLoadingCurrentPage ? <ActivityIndicator size="large" /> : null
+            }
           />
         )}
       </View>

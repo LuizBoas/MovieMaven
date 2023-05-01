@@ -28,17 +28,17 @@ function List() {
     const fetchMovies = async () => {
       try {
         const key = "2ac0e6167cf0d7a5c8a6afdace6a8808";
-        let url = `https://api.themoviedb.org/3/discover/movie?api_key=${key}&page=${currentPage}&sort_by=popularity.desc`;
+        let url = `https://api.themoviedb.org/3/discover/movie?api_key=${key}&language=pt-BR&page=${currentPage}&sort_by=popularity.desc`;
         if (filter !== "" && typeSearch === "title") {
-          url = `https://api.themoviedb.org/3/search/movie?api_key=${key}&query=${filter}&page=${currentPage}`;
+          url = `https://api.themoviedb.org/3/search/movie?api_key=${key}&language=pt-BR&query=${filter}&page=${currentPage}`;
         } else if (filter !== "" && typeSearch === "genre") {
-          url = `https://api.themoviedb.org/3/discover/movie?api_key=${key}&page=${currentPage}&with_genres=${filter}`;
+          url = `https://api.themoviedb.org/3/discover/movie?api_key=${key}&language=pt-BR&page=${currentPage}&with_genres=${filter}`;
         } else if (
           typeSearch === "now_playing" ||
           typeSearch === "top_rated" ||
           typeSearch === "upcoming"
         ) {
-          url = `https://api.themoviedb.org/3/movie/${typeSearch}?api_key=${key}&page=${currentPage}`;
+          url = `https://api.themoviedb.org/3/movie/${typeSearch}?api_key=${key}&language=pt-BR&page=${currentPage}`;
         }
         const response = await axios.get(url);
         setMovies((prevMovies) => {
@@ -73,8 +73,8 @@ function List() {
   );
 
   const handleLoadMore = () => {
-    setIsLoadingCurrentPage(true);
     if (currentPage < totalPages) {
+      setIsLoadingCurrentPage(true);
       setCurrentPage(currentPage + 1);
     }
   };

@@ -11,15 +11,13 @@ import { genreMap } from "../../constants/movie";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
-export interface Movie {
-  id: string;
-  title: string;
-  overview: string;
-  release_date: string;
-  poster_path: string;
-  popularity: number;
-  vote_average: number;
+interface Movie {
+  backdrop_path: string | null;
   genre_ids: number[];
+  id: number;
+  overview: string | null;
+  poster_path: string | null;
+  title: string;
 }
 
 interface MovieItemProps {
@@ -77,7 +75,15 @@ const MovieItem: React.FC<MovieItemProps> = ({
   }
 
   const handleMoviePress = () => {
-    navigate("Details", { movie });
+    fetch(
+      `https://api.themoviedb.org/3/movie/${movie.id}?api_key=2ac0e6167cf0d7a5c8a6afdace6a8808&language=pt-BR`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const movieFull = data;
+        navigate("Details", { movieFull });
+      })
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {

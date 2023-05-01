@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
 
   profile: {
     alignItems: "center",
-    paddingTop: 25,
+    paddingTop: 10,
     paddingHorizontal: 12,
     paddingBottom: 25,
     justifyContent: "center",
@@ -21,8 +21,7 @@ const styles = StyleSheet.create({
   post: {
     width: 150,
     height: 250,
-    borderRadius: 1,
-    backgroundColor: "#eee",
+    borderRadius: 2,
   },
 
   name: {
@@ -40,22 +39,19 @@ const styles = StyleSheet.create({
     color: "#6a6180",
     fontSize: 12,
     marginTop: 4,
+    marginBottom: 40,
   },
 
   favoriteButton: {
     position: "absolute",
-    bottom: 305,
+    bottom: 23,
     left: 10,
-    backgroundColor: "#8257e5",
-    width: 56,
-    height: 56,
+    backgroundColor: "#04D361",
+    width: 53,
+    height: 53,
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
-  },
-
-  firstItem: {
-    marginBottom: 23,
   },
 
   favorited: {
@@ -64,11 +60,11 @@ const styles = StyleSheet.create({
 
   shareButton: {
     position: "absolute",
-    bottom: 305,
-    left: 295,
+    bottom: 23,
+    left: 299,
     backgroundColor: "#8257e5",
-    width: 56,
-    height: 56,
+    width: 53,
+    height: 53,
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",

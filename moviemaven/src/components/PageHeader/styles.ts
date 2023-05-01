@@ -13,8 +13,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 
-  header: {},
-
   logo: {
     width: "30%",
     height: "250%",
@@ -33,9 +31,8 @@ const styles = StyleSheet.create({
   description: {
     fontFamily: "Poppins_400Regular",
     color: "#04d361",
-    fontSize: 13,
+    fontSize: 15,
     textAlign: "left",
-    marginBottom: 10,
   },
 });
 
