@@ -6,7 +6,7 @@ import { RectButton } from "react-native-gesture-handler";
 import styles from "./styles";
 
 import landingImg from "../../assets/images/landing.png";
-import backgroundImg from "../../assets/images/give-classes-background.png";
+import backgroundImg from "../../assets/images/image-background.png";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 /**

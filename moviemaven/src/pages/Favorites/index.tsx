@@ -8,36 +8,21 @@ import axios from "axios";
 import { FlatList } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import MovieItem, { Movie } from "../../components/MovieItem";
 import { useFocusEffect } from "@react-navigation/native";
+import MovieItem from "../../components/MovieItem";
 useFocusEffect;
 
+interface Movie {
+  backdrop_path: string | null;
+  genre_ids: number[];
+  id: number;
+  overview: string | null;
+  poster_path: string | null;
+  title: string;
+}
+
 function Favorites() {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isLoadingCurrentPage, setIsLoadingCurrentPage] =
-    useState<boolean>(false);
-  const [movies, setMovies] = useState<any[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
-  const [favorites, setFavorites] = useState<number[]>([]);
-
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.themoviedb.org/3/discover/movie?api_key=${"2ac0e6167cf0d7a5c8a6afdace6a8808"}&language=pt-BR&page=${currentPage}`
-        );
-        setMovies((prevMovies) => [...prevMovies, ...response.data.results]);
-        setTotalPages(response.data.total_pages);
-        setIsLoading(false);
-        setIsLoadingCurrentPage(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchMovies();
-  }, [currentPage]);
+  const [favorites, setFavorites] = useState<Movie[]>([]);
 
   useEffect(() => {
     loadFavorites();
@@ -57,38 +42,18 @@ function Favorites() {
     }, [])
   );
 
-  const handleLoadMore = () => {
-    if (currentPage < totalPages) {
-      setIsLoadingCurrentPage(true);
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
   return (
     <View style={styles.container}>
       <PageHeader title="Sua lista de filmes:" goBack="Facade" />
       <View style={styles.movieList}>
-        {isLoading ? (
-          <ActivityIndicator size="large" />
-        ) : (
-          <FlatList
-            data={movies.filter((movies) => favorites.includes(movies.id))}
-            renderItem={({ item: movie }) => (
-              <MovieItem
-                key={movie.id}
-                movie={movie}
-                favorited={favorites.includes(movie.id)}
-              />
-            )}
-            keyExtractor={(item, index) => String(index)}
-            onEndReached={handleLoadMore}
-            onEndReachedThreshold={0.1}
-            showsVerticalScrollIndicator={false}
-            ListFooterComponent={
-              isLoadingCurrentPage ? <ActivityIndicator size="large" /> : null
-            }
-          />
-        )}
+        <FlatList
+          data={favorites}
+          renderItem={({ item: movie }) => (
+            <MovieItem key={movie.id} movie={movie} favorited={true} />
+          )}
+          keyExtractor={(item, index) => String(index)}
+          showsVerticalScrollIndicator={false}
+        />
       </View>
     </View>
   );

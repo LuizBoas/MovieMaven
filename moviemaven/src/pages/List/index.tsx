@@ -8,10 +8,19 @@ import axios from "axios";
 import { FlatList, TextInput } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import MovieItem, { Movie } from "../../components/MovieItem";
+import MovieItem from "../../components/MovieItem";
 import { useFocusEffect } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
 import { genreMap } from "../../constants/movie";
+
+interface Movie {
+  backdrop_path: string | null;
+  genre_ids: number[];
+  id: number;
+  overview: string | null;
+  poster_path: string | null;
+  title: string;
+}
 
 function List() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -20,7 +29,7 @@ function List() {
   const [movies, setMovies] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [favorites, setFavorites] = useState<number[]>([]);
+  const [favorites, setFavorites] = useState<Movie[]>([]);
   const [filter, setFilter] = useState<string>("");
   const [typeSearch, setTypeSearch] = useState<string>("popularity");
 
@@ -167,7 +176,9 @@ function List() {
                 <MovieItem
                   key={movie.id}
                   movie={movie}
-                  favorited={favorites.includes(movie.id)}
+                  favorited={favorites.some(
+                    (favorite) => favorite.id === movie.id
+                  )}
                 />
               );
             }}

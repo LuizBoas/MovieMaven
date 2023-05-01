@@ -30,7 +30,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   }
 
   return (
-    <View style={[styles.container]}>
+    <View
+      style={[
+        styles.container,
+        description === undefined ? styles.containerDescription : undefined,
+      ]}
+    >
       <View style={styles.topBar}>
         <BorderlessButton onPress={handleGoBack}>
           <Ionicons
@@ -44,9 +49,9 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         <Image source={logoImg} resizeMode="contain" style={styles.logo} />
       </View>
 
-      <View>
+      <View style={styles.containDate}>
         {title && <Text style={styles.title}>{title}</Text>}
-        <Text style={styles.description}>{description}</Text>
+        {description && <Text style={styles.description}>{description}</Text>}
         {headerRight}
       </View>
 

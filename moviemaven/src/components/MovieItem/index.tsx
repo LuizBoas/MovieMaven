@@ -53,18 +53,19 @@ const MovieItem: React.FC<MovieItemProps> = ({
   async function handleToggleFavorite() {
     try {
       let favorites = await AsyncStorage.getItem("favorites");
-      favorites = JSON.parse(favorites!) || [];
+      let favoritesArray: Movie[] = [];
 
-      let favoritesArray: string[] = [];
-      if (favorites!.length > 0) {
-        favoritesArray = [...favorites!];
+      if (favorites) {
+        favoritesArray = JSON.parse(favorites);
       }
 
-      if (isFavorited) {
-        favoritesArray.splice(favoritesArray.indexOf(movie.id), 1);
+      const index = favoritesArray.findIndex((item) => item.id === movie.id);
+
+      if (index >= 0) {
+        favoritesArray.splice(index, 1);
         setIsFavorited(false);
       } else {
-        favoritesArray.push(movie.id);
+        favoritesArray.push(movie);
         setIsFavorited(true);
       }
 

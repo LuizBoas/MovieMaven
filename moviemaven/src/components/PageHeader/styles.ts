@@ -2,8 +2,13 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
-    padding: 40,
+    paddingHorizontal: 40,
+    paddingTop: 40,
     backgroundColor: "#8257e5",
+  },
+
+  containerDescription: {
+    paddingBottom: 40,
   },
 
   topBar: {
@@ -17,6 +22,10 @@ const styles = StyleSheet.create({
     width: "30%",
     height: "250%",
     marginRight: -20,
+  },
+
+  containDate: {
+    marginBottom: 15,
   },
 
   title: {
