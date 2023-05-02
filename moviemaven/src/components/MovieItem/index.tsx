@@ -7,33 +7,44 @@ import unfavoriteIcon from "../../assets/images/icons/unfavorite.png";
 import { Ionicons } from "@expo/vector-icons";
 
 import styles from "./styles";
-import { genreMap } from "../../constants/movie";
+import { genreMap } from "../../utils/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
 interface Movie {
-  backdrop_path: string | null;
+  backdrop_path?: string | null;
   genre_ids: number[];
   id: number;
-  overview: string | null;
-  poster_path: string | null;
+  overview?: string | null;
+  poster_path?: string | null;
   title: string;
 }
 
 interface MovieItemProps {
   movie: Movie;
   favorited: boolean;
-  isFirstItem?: boolean;
 }
 
+/**
+ * Este é um componente que representa o cardde um filme.
+ * Ele recebe como props um objeto 'movie', contendo informações sobre o filme,
+ * um boolean 'favorited' indicando se o filme está favoritado ou não.
+ */
 const MovieItem: React.FC<MovieItemProps> = ({
   movie,
   favorited,
 }: MovieItemProps) => {
   const [isFavorited, setIsFavorited] = useState(favorited);
-  const genreNames = movie.genre_ids.map((id) => genreMap[id]).join(", ");
   const { navigate } = useNavigation();
 
+  useEffect(() => {
+    setIsFavorited(favorited);
+  }, [favorited]);
+
+  /**
+   * Esta função é chamada quando o botão de compartilhar é pressionado.
+   * Ela utiliza a API 'Share' do React Native para compartilhar um link do filme.
+   */
   const shareMovie = async () => {
     try {
       const result = await Share.share({
@@ -50,6 +61,11 @@ const MovieItem: React.FC<MovieItemProps> = ({
     }
   };
 
+  /**
+   * Esta função é chamada quando o botão de favoritar é pressionado.
+   * Ela utiliza a API 'AsyncStorage' do React Native para armazenar a lista de filmes
+   * favoritos localmente.
+   */
   async function handleToggleFavorite() {
     try {
       let favorites = await AsyncStorage.getItem("favorites");
@@ -75,6 +91,11 @@ const MovieItem: React.FC<MovieItemProps> = ({
     }
   }
 
+  /**
+   * Esta função é chamada quando o usuario clicar no card do filme.
+   * Ela faz a requisição na API de todos os dados do filme e o envia
+   * para a tela de detalhes.
+   */
   const handleMoviePress = () => {
     fetch(
       `https://api.themoviedb.org/3/movie/${movie.id}?api_key=2ac0e6167cf0d7a5c8a6afdace6a8808&language=pt-BR`
@@ -86,10 +107,6 @@ const MovieItem: React.FC<MovieItemProps> = ({
       })
       .catch((error) => console.error(error));
   };
-
-  useEffect(() => {
-    setIsFavorited(favorited);
-  }, [favorited]);
 
   return (
     <View>
@@ -106,8 +123,10 @@ const MovieItem: React.FC<MovieItemProps> = ({
             }}
           />
 
-          <Text style={styles.name}>{movie.title}</Text>
-          <Text style={styles.genres}>{genreNames}</Text>
+          <Text style={styles.title}>{movie.title}</Text>
+          <Text style={styles.genres}>
+            {movie.genre_ids.map((id) => genreMap[id]).join(", ")}
+          </Text>
         </View>
       </TouchableOpacity>
       <View>

@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
 
-  name: {
+  title: {
     fontFamily: "Archivo_700Bold",
     color: "#32264d",
     fontSize: 20,

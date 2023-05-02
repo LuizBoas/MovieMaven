@@ -1,8 +1,10 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  container: {
-    overflow: "hidden",
+  containerPrime: {
+    flex: 1,
+    resizeMode: "cover",
+    backgroundColor: "#fff",
   },
 
   imageBackground: {
@@ -11,19 +13,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 
+  container: {
+    overflow: "hidden",
+  },
+
+  profile: {
+    alignItems: "center",
+    paddingTop: 25,
+    paddingHorizontal: 12,
+    paddingBottom: 25,
+    justifyContent: "center",
+  },
+
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)", // definir a cor de fundo com transparência
-  },
-
-  poster: {
-    height: 300,
-    width: "100%",
-    resizeMode: "cover",
-  },
-
-  info: {
-    marginTop: -40,
   },
 
   genres: {
@@ -41,20 +45,13 @@ const styles = StyleSheet.create({
     lineHeight: 25,
   },
 
-  movieList: {
-    marginTop: -40,
-    paddingHorizontal: 16,
-    paddingBottom: 20,
-    marginBottom: 220,
-  },
-
   castListContainer: {
     flex: 1,
   },
 
   subTitle: {
     fontFamily: "Archivo_700Bold",
-    color: "#8257e5",
+    color: "#9170DD",
     marginTop: 20,
     fontSize: 20,
     lineHeight: 25,
@@ -82,14 +79,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     padding: 20,
-  },
-
-  profile: {
-    alignItems: "center",
-    paddingTop: 25,
-    paddingHorizontal: 12,
-    paddingBottom: 25,
-    justifyContent: "center",
   },
 
   post: {

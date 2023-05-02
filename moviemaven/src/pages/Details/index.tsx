@@ -9,28 +9,21 @@ import { FontAwesome } from "@expo/vector-icons";
 
 import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
+import {
+  formatGenres,
+  formatMinToHours,
+  formatMoney,
+} from "../../utils/functions";
 
 interface MovieFull {
-  adult: boolean;
   backdrop_path: string | null;
-  belongs_to_collection: {
-    backdrop_path: string | null;
-    id: number;
-    name: string;
-    poster_path: string | null;
-  } | null;
   budget: number;
   genres: {
     id: number;
     name: string;
   }[];
-  homepage: string;
   id: number;
-  imdb_id: string | null;
-  original_language: string;
-  original_title: string;
   overview: string | null;
-  popularity: number;
   poster_path: string | null;
   production_companies: {
     id: number;
@@ -38,24 +31,11 @@ interface MovieFull {
     name: string;
     origin_country: string;
   }[];
-  production_countries: {
-    iso_3166_1: string;
-    name: string;
-  }[];
-  release_date: string;
   revenue: number;
-  runtime: number | null;
-  spoken_languages: {
-    english_name: string;
-    iso_639_1: string;
-    name: string;
-  }[];
-  status: string;
+  runtime: number;
   tagline: string;
   title: string;
-  video: boolean;
   vote_average: number;
-  vote_count: number;
 }
 
 export type RootStackParamList = {
@@ -68,11 +48,13 @@ interface Props {
   route?: DetailsRouteProp;
 }
 
+/**
+ * Exibe os detalhes mais profundos do filme.
+ */
 function Details({ route }: Props) {
   const { movieFull } = route!.params;
-  const genreNames = movieFull.genres.map((genre) => genre.name).join(", ");
-  const voteAverage = movieFull.vote_average.toFixed(1);
 
+  /**Define a cor da borda do círculo com base na votação do filme */
   const circleBorderColor =
     movieFull.vote_average >= 7
       ? "#4CAF50"
@@ -80,23 +62,8 @@ function Details({ route }: Props) {
       ? "#FFC107"
       : "#F44336";
 
-  const hours = Math.floor(movieFull.runtime! / 60);
-  const minutes = movieFull.runtime! % 60;
-  const duration = `${hours} h ${minutes} min`;
-
-  const formatProducers = (producers: string[]): string => {
-    return producers.join(", ");
-  };
-
-  const formatMoney = (value: number): string => {
-    return value.toLocaleString("en-US", {
-      style: "currency",
-      currency: "USD",
-    });
-  };
-
   return (
-    <View style={styles.imageBackground}>
+    <View style={styles.containerPrime}>
       <PageHeader
         title={movieFull.title}
         description={movieFull.tagline}
@@ -119,29 +86,35 @@ function Details({ route }: Props) {
                   style={styles.post}
                 />
 
-                <Text style={styles.genres}>{genreNames}</Text>
+                <Text style={styles.genres}>
+                  {formatGenres(movieFull.genres)}
+                </Text>
                 <View
                   style={[styles.circle, { borderColor: circleBorderColor }]}
                 >
                   <Text
                     style={[styles.circleText, { color: circleBorderColor }]}
                   >
-                    {voteAverage}
+                    {movieFull.vote_average.toFixed(1)}
                   </Text>
                 </View>
                 <Text style={styles.overview}>{movieFull.overview}</Text>
 
                 <View style={styles.containerPainelHor}>
-                  <View style={styles.detailRow}>
-                    <View style={styles.detailIcon}>
-                      <Ionicons
-                        name="ios-timer-outline"
-                        size={24}
-                        color="#fff"
-                      />
+                  {movieFull.runtime !== null && (
+                    <View style={styles.detailRow}>
+                      <View style={styles.detailIcon}>
+                        <Ionicons
+                          name="ios-timer-outline"
+                          size={24}
+                          color="#fff"
+                        />
+                      </View>
+                      <Text style={styles.detailText}>
+                        {formatMinToHours(movieFull.runtime)}
+                      </Text>
                     </View>
-                    <Text style={styles.detailText}>{duration}</Text>
-                  </View>
+                  )}
                   {movieFull.revenue !== 0 && (
                     <View style={styles.detailRow}>
                       <View style={styles.detailIcon}>

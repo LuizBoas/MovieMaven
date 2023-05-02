@@ -11,28 +11,39 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import MovieItem from "../../components/MovieItem";
 import { useFocusEffect } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
-import { genreMap } from "../../constants/movie";
+import { genreMap } from "../../utils/constants";
 
 interface Movie {
-  backdrop_path: string | null;
+  backdrop_path?: string | null;
   genre_ids: number[];
   id: number;
-  overview: string | null;
-  poster_path: string | null;
+  overview?: string | null;
+  poster_path?: string | null;
   title: string;
 }
 
+/**
+ * É o componente principal da tela que lista
+ * os filmes de acordo com a opção selecionada pelo usuário.
+ */
 function List() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isLoadingCurrentPage, setIsLoadingCurrentPage] =
     useState<boolean>(false);
-  const [movies, setMovies] = useState<any[]>([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [favorites, setFavorites] = useState<Movie[]>([]);
   const [filter, setFilter] = useState<string>("");
   const [typeSearch, setTypeSearch] = useState<string>("popularity");
 
+  /**
+   * A função é usada para fazer uma chamada à API
+   * e obter os filmes a serem exibidos na lista, com base
+   * nas opções selecionadas pelo usuário (tipo de pesquisa e filtro de busca).
+   * Essa chamada é feita sempre que há mudanças nas dependências passadas para essa função,
+   * que são: currentPage, filter e typeSearch.
+   */
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -51,7 +62,7 @@ function List() {
         }
         const response = await axios.get(url);
         setMovies((prevMovies) => {
-          const newMovies = response.data.results.filter((movie) => {
+          const newMovies = response.data.results.filter((movie: Movie) => {
             return !prevMovies.some((prevMovie) => prevMovie.id === movie.id);
           });
           return [...prevMovies, ...newMovies];
@@ -67,20 +78,28 @@ function List() {
     fetchMovies();
   }, [currentPage, filter, typeSearch]);
 
-  function loadFavorites() {
-    AsyncStorage.getItem("favorites").then((response) => {
-      if (response) {
-        setFavorites(JSON.parse(response));
-      }
-    });
-  }
-
   useFocusEffect(
     React.useCallback(() => {
       loadFavorites();
     }, [])
   );
 
+  /**
+   * Essa função é responsável por obter a lista de filmes favoritos do usuário
+   * armazenada no dispositivo pelo AsyncStorage.
+   */
+  const loadFavorites = () => {
+    AsyncStorage.getItem("favorites").then((response) => {
+      if (response) {
+        setFavorites(JSON.parse(response));
+      }
+    });
+  };
+
+  /**
+   * Essa função é chamada quando o usuário chega ao final da lista e mais
+   * filmes precisam ser carregados.
+   */
   const handleLoadMore = () => {
     if (currentPage < totalPages) {
       setIsLoadingCurrentPage(true);
@@ -88,6 +107,13 @@ function List() {
     }
   };
 
+  /**
+   * Essa função é chamada quando o usuário faz uma
+   * busca por filmes, seja por título ou por gênero.
+   * Ela recebe o texto digitado pelo usuário (text) e atualiza o estado de filter com esse texto,
+   * limpa a lista de filmes (setMovies([])), reseta a página atual
+   * (setCurrentPage(1)) e o número total de páginas (setTotalPages(1)) e configura o estado de isLoading para true.
+   */
   const handleSearch = (text: string) => {
     setFilter(text);
     setMovies([]);

@@ -13,14 +13,17 @@ import MovieItem from "../../components/MovieItem";
 useFocusEffect;
 
 interface Movie {
-  backdrop_path: string | null;
+  backdrop_path?: string | null;
   genre_ids: number[];
   id: number;
-  overview: string | null;
-  poster_path: string | null;
+  overview?: string | null;
+  poster_path?: string | null;
   title: string;
 }
 
+/**
+ * Página que mostra uma lista de filmes favoritados.
+ */
 function Favorites() {
   const [favorites, setFavorites] = useState<Movie[]>([]);
 
@@ -28,6 +31,15 @@ function Favorites() {
     loadFavorites();
   }, [favorites]);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      loadFavorites();
+    }, [])
+  );
+
+  /**
+   * Função para carregar os filmes favoritos do AsyncStorage
+   */
   function loadFavorites() {
     AsyncStorage.getItem("favorites").then((response) => {
       if (response) {
@@ -35,12 +47,6 @@ function Favorites() {
       }
     });
   }
-
-  useFocusEffect(
-    React.useCallback(() => {
-      loadFavorites();
-    }, [])
-  );
 
   return (
     <View style={styles.container}>

@@ -1,16 +1,18 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  cast: {
+  container: {
     marginRight: 10,
     alignItems: "center",
   },
+
   castImage: {
     width: 100,
     height: 150,
     resizeMode: "cover",
     borderRadius: 5,
   },
+
   castName: {
     fontFamily: "Archivo_700Bold",
     fontSize: 12,
@@ -18,6 +20,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: "#04d361",
   },
+
   castCharacter: {
     fontSize: 10,
     color: "#fff",

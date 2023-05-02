@@ -16,6 +16,10 @@ interface PageHeaderProps {
   children?: ReactNode;
 }
 
+/**
+ * Esse componente tem a função de redenriza o pageHeader das
+ * telas da aplicação(fora a Facade).
+ */
 const PageHeader: React.FC<PageHeaderProps> = ({
   title,
   description,
@@ -45,16 +49,13 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             resizeMode="contain"
           />
         </BorderlessButton>
-
         <Image source={logoImg} resizeMode="contain" style={styles.logo} />
       </View>
-
       <View style={styles.containDate}>
         {title && <Text style={styles.title}>{title}</Text>}
         {description && <Text style={styles.description}>{description}</Text>}
         {headerRight}
       </View>
-
       {children}
     </View>
   );
