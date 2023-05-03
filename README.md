@@ -5,7 +5,7 @@ O "MovieMaven" é um aplicativo móvel que permite aos usuários pesquisar e exp
 ## :rocket: Tecnologias
 
 - [Typescript](https://www.typescriptlang.org/)
-- [ReactJS](https://reactjs.org/)
+- [ReactNative](https://reactnative.dev/)
 - [axios](https://github.com/axios/axios)
 
 ## :boom: Como Executar
